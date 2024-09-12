@@ -41,10 +41,13 @@ class UnameApp:
 #Меняем пароль VNC
 
     def on_save_button_clicked(self, button):
-        input_text = self.entry_input.get_text()
-        change_vnc = "x11vnc -storepasswd {} /root/.vnc/passwd".format(input_text)
-        os.system(change_vnc)
-        print("VNC Passwd change!") 
+        input_text = self.entry_input.get_text().strip()
+        if input_text:
+            change_vnc = "x11vnc -storepasswd {} /root/.vnc/passwd".format(input_text)
+            os.system(change_vnc)
+            print("VNC Passwd change!")
+        else:
+            print("Null passwd dumb ass!")
 
 
 #####################################################################################
