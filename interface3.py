@@ -46,15 +46,17 @@ class UnameApp:
     def on_save_button_clicked(self, button):
         input_text = self.entry_input.get_text().strip()
         if os.geteuid() != 0:
-            exit("You need to bee root!")
+            text_pw_change = "You need to bee root!"
+            self.lbl_output_3.set_text(text_pw_change)
         else:    
             if input_text:
                 change_vnc = "x11vnc -storepasswd {} /root/.vnc/passwd".format(input_text)
                 os.system(change_vnc)
                 text_pw_change = "VNC Passwd change!"
-                self.lbl_output_3.set_text(text_pw_change) 
+                self.lbl_output_3.set_text(text_pw_change)
             else:
-                print("Null passwd!")
+                text_pw_change = "Null passwd!"
+                self.lbl_output_3.set_text(text_pw_change)
 
 #####################################################################################
 #Очистить выведенные поля 
