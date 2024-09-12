@@ -34,6 +34,9 @@ class UnameApp:
         # Подключение обработчиков сигналов смены пароля
         self.save_button.connect("clicked", self.on_save_button_clicked)
 
+        #Вывод успешной смены пароля
+        self.lbl_output_3 = builder.get_object("lbl_output_3")
+
         self.window.connect("destroy", Gtk.main_quit)
         self.window.show_all()
 
@@ -48,7 +51,8 @@ class UnameApp:
             if input_text:
                 change_vnc = "x11vnc -storepasswd {} /root/.vnc/passwd".format(input_text)
                 os.system(change_vnc)
-                print("VNC Passwd change!")
+                text_pw_change = "VNC Passwd change!"
+                self.lbl_output_3.set_text(text_pw_change) 
             else:
                 print("Null passwd!")
 
