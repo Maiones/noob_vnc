@@ -21,7 +21,7 @@ class UnameApp:
     def __init__(self):
     # Попробуем загрузить интерфейс из файла Glade
         builder = Gtk.Builder()
-        builder.add_from_file("/opt/glade/interface.glade")
+        builder.add_from_file("interface.glade")
         builder.connect_signals(self)
 
         # Получение элементов интерфейса
