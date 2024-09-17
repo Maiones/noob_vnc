@@ -28,17 +28,14 @@ class UnameApp:
         self.window = builder.get_object("MainWindow")
         
         self.btn_run = builder.get_object("btn_run")
-        self.btn_run_2 = builder.get_object("btn_run_2")
         self.btn_run_3 = builder.get_object("btn_run_3")
         self.lbl_output = builder.get_object("lbl_output")
-        self.lbl_output_2 = builder.get_object("lbl_output_2")
         ## Элементы для смены пароля
         self.entry_input = builder.get_object("entry_input")
         self.save_button = builder.get_object("save_button")
 
         # Подключение обработчиков сигналов
         self.btn_run_3.connect("clicked", self.on_btn_run_3_clicked)
-        self.btn_run_2.connect("clicked", self.on_btn_run_2_clicked)
         self.btn_run.connect("clicked", self.on_btn_run_clicked)
         
         # Подключение обработчиков сигналов смены пароля
@@ -75,24 +72,6 @@ class UnameApp:
     def on_btn_run_3_clicked(self, button):
         print_lacuna = ''
         self.lbl_output.set_text(print_lacuna)          
-        self.lbl_output_2.set_text(print_lacuna)
-
-
-#####################################################################################
-
-    def on_btn_run_2_clicked(self, button):
-        result = subprocess.Popen(
-                "uname -r", 
-                shell=True, 
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE
-            )
-        # запускает процесс и дожидается его завершения
-        output, error = result.communicate()
-        # декодирование стандартного вывода (stdout) из байтов в строку
-        decoded_output = output.decode().strip()
-        self.lbl_output_2.set_text(decoded_output)
-         
 
 #####################################################################################
 
