@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=start3
+Comment=
+Exec=/opt/glade/start3.sh
+Icon=cs-display
+Path=/opt/glade/
+Terminal=false
+StartupNotify=false
+Name[ru_RU.utf8]=VNC_passwd
