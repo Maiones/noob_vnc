@@ -7,6 +7,16 @@ import os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+#Работает, но pip не поставлен на сп8
+#from elevate import elevate
+
+#def is_root():
+#        return os.getuid() == 0
+
+#elevate()
+#print(is_root())
+
+
 class UnameApp:
     def __init__(self):
     # Попробуем загрузить интерфейс из файла Glade
@@ -45,6 +55,7 @@ class UnameApp:
 
     def on_save_button_clicked(self, button):
         input_text = self.entry_input.get_text().strip()
+        #проверяем на рут тут и дальше в тело вывод полученной инфы!
         if os.geteuid() != 0:
             text_pw_change = "You need to bee root!"
             self.lbl_output_3.set_text(text_pw_change)
@@ -52,10 +63,10 @@ class UnameApp:
             if input_text:
                 change_vnc = "x11vnc -storepasswd {} /root/.vnc/passwd".format(input_text)
                 os.system(change_vnc)
-                text_pw_change = "VNC Passwd change!"
+                text_pw_change = "Пароль от VNC изменен!"
                 self.lbl_output_3.set_text(text_pw_change)
             else:
-                text_pw_change = "Null passwd!"
+                text_pw_change = "Пустой пароль!"
                 self.lbl_output_3.set_text(text_pw_change)
 
 #####################################################################################
