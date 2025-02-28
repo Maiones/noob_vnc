@@ -66,14 +66,14 @@ class UnameApp:
 #Меняем пароль VNC
 
     def on_save_button_clicked(self, button):
-        input_text = self.entry_input.get_text().strip()
+        entry_input = self.entry_input.get_text().strip()
         #проверяем на рут тут и дальше в тело вывод полученной инфы!
         if os.geteuid() != 0:
             text_pw_change = "You need to bee root!"
             self.lbl_output_3.set_text(text_pw_change)
         else:    
-            if input_text:
-                change_vnc = "x11vnc -storepasswd {} /root/.vnc/passwd".format(input_text)
+            if entry_input:
+                change_vnc = "x11vnc -storepasswd {} /root/.vnc/passwd".format(entry_input)
                 os.system(change_vnc)
                 text_pw_change = "Пароль от VNC изменен!"
                 self.lbl_output_3.set_text(text_pw_change)
@@ -94,7 +94,7 @@ class UnameApp:
         
         output, error = result.communicate()
         decoded_output = output.decode().strip()
-        self.lbl_output.set_text(decoded_output)
+        self.entry_input.set_text(decoded_output)
 
 #####################################################################################
 #Меняем переменные
@@ -107,14 +107,11 @@ class UnameApp:
             text_pw_change = "You need to bee root!"
             self.lbl_output_env.set_text(text_pw_change)
         else:    
-      #      if input_text_env:
             change_env = "echo {} > /etc/environment".format(input_text_env)
             os.system(change_env)
             text_pw_change = "Переменная прокси изменена!"
             self.lbl_output_3.set_text(text_pw_change)
-      #      else:
-     #           text_pw_change = "Пустое значение env!"
-      #          self.lbl_output_3.set_text(text_pw_change)
+
 
 
 #####################################################################################
