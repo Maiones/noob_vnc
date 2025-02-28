@@ -57,7 +57,7 @@ class UnameApp:
         self.lbl_output_3 = builder.get_object("lbl_output_3")
 
         #Выdод об успешной смене env
- ##       self.lbl_output_env = builder.get_object("lbl_output_env")
+        self.lbl_output_env = builder.get_object("lbl_output_env")
 
         self.window.connect("destroy", Gtk.main_quit)
         self.window.show_all()
@@ -100,20 +100,21 @@ class UnameApp:
 #Меняем переменные
 
     def on_save_button_clicked_env(self, button):
-        input_text_env = self.entry_input.get_text().strip()
+        #Проверка пустой строки
+        input_text_env = self.lbl_output_env.get_text().strip()
         #проверяем на рут тут и дальше в тело вывод полученной инфы!
         if os.geteuid() != 0:
             text_pw_change = "You need to bee root!"
             self.lbl_output_env.set_text(text_pw_change)
         else:    
-            if input_text_env:
-                change_env = "echo {} > /etc/environment".format(input_text_env)
-                os.system(change_env)
-                text_pw_change = "Переменная прокси изменена!"
-                self.lbl_output_3.set_text(text_pw_change)
-            else:
-                text_pw_change = "Пустое значение env!"
-                self.lbl_output_3.set_text(text_pw_change)
+      #      if input_text_env:
+            change_env = "echo {} > /etc/environment".format(input_text_env)
+            os.system(change_env)
+            text_pw_change = "Переменная прокси изменена!"
+            self.lbl_output_3.set_text(text_pw_change)
+      #      else:
+     #           text_pw_change = "Пустое значение env!"
+      #          self.lbl_output_3.set_text(text_pw_change)
 
 
 #####################################################################################
