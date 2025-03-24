@@ -129,8 +129,8 @@ class UnameApp:
         
         output, error = result.communicate()
         decoded_output = output.decode().strip()
-        self.lbl_output_env.set_text(decoded_output)
-
+        text_buffer = self.lbl_output_env.get_buffer()
+        text_buffer.set_text(decoded_output)
 
 #####################################################################################
 #Очистить выведенные результаты 
@@ -138,9 +138,9 @@ class UnameApp:
     def on_btn_run_3_clicked(self, button):
         print_lacuna = ''
         self.entry_input.set_text(print_lacuna)
-     #   self.lbl_output.set_text(print_lacuna)
         self.lbl_output_3.set_text(print_lacuna)
-        self.lbl_output_env.set_text(print_lacuna)
+        text_buffer = self.lbl_output_env.get_buffer()
+        text_buffer.set_text(print_lacuna)
 
 #####################################################################################
 
