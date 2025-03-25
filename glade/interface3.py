@@ -100,20 +100,19 @@ class UnameApp:
 #Меняем переменные
 
     def on_save_button_clicked_env(self, button):
-        input_text_env = self.entry_input.get_text().strip()
+       # input_text_env = self.entry_input.get_text().strip()
         #проверяем на рут тут и дальше в тело вывод полученной инфы!
         if os.geteuid() != 0:
             text_pw_change = "You need to bee root!"
-            self.lbl_output_env.set_text(text_pw_change)
+            self.text_buffer_env.set_text(text_pw_change)
         else:    
-            if input_text_env:
-                change_env = "echo {} > /etc/environment".format(input_text_env)
-                os.system(change_env)
-                text_pw_change = "Переменная прокси изменена!"
-                self.lbl_output_3.set_text(text_pw_change)
-            else:
-                text_pw_change = "Пустое значение env!"
-                self.lbl_output_3.set_text(text_pw_change)
+            change_env = "echo {} > /etc/environment".format(self.text_buffer_env.get_text(self.text_buffer_env.get_start_iter(), self.text_buffer_env.get_end_iter(), True))
+            os.system(change_env)
+            text_pw_change = "Переменная прокси изменена!"
+            self.text_buffer_env.set_text(text_pw_change)
+        #    else:
+         #       text_pw_change = "Пустое значение env!"
+         #       self.text_buffer_env.set_text(text_pw_change)
 
 
 #####################################################################################
@@ -132,6 +131,7 @@ class UnameApp:
         text_buffer = self.lbl_output_env.get_buffer()
         text_buffer.set_text(decoded_output)
         self.text_buffer_env = self.lbl_output_env.get_buffer()
+
 #####################################################################################
 #Очистить выведенные результаты 
 
