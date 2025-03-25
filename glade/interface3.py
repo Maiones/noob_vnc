@@ -139,7 +139,6 @@ class UnameApp:
         print_lacuna = ''
         self.entry_input.set_text(print_lacuna)
         self.lbl_output_3.set_text(print_lacuna)
-      #  text_buffer = self.lbl_output_env.get_buffer()
         self.text_buffer_env.set_text(print_lacuna)
 
 #####################################################################################
