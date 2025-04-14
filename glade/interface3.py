@@ -4,6 +4,9 @@ import subprocess
 import threading
 import gi
 import os
+import urllib.parse
+import re
+import fileinput
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
@@ -38,9 +41,17 @@ class UnameApp:
         self.entry_input = builder.get_object("entry_input")
         self.save_button = builder.get_object("save_button")
 
+        # Элементы для смены proxy
+        self.pass_input = builder.get_object("pass_input")
+        self.login_input = builder.get_object("login_input")        
+        self.no_proxy_input = builder.get_object("no_proxy_input")        
+
         ## Элементы для смены переменных
  #       self.entry_input_env = builder.get_object("entry_input")
         self.save_button_env = builder.get_object("save_button_env")
+
+        ## Элементы для смены прокси исключении
+        self.save_button_env_no_proxy = builder.get_object("save_button_env_no_proxy")
 
         # Подключение обработчиков сигналов
         self.btn_run_3.connect("clicked", self.on_btn_run_3_clicked)
@@ -53,6 +64,9 @@ class UnameApp:
         # Подключение обработчиков сигналов смены переменных
         self.save_button_env.connect("clicked", self.on_save_button_clicked_env)
 
+        # Подключение обработчиков сигналов прокси исключении
+        self.save_button_env_no_proxy.connect("clicked", self.on_save_button_env_no_proxy)
+
         #Вывод успешной смены пароля
         self.lbl_output_3 = builder.get_object("lbl_output_3")
 
@@ -62,8 +76,7 @@ class UnameApp:
         self.window.connect("destroy", Gtk.main_quit)
         self.window.show_all()
 
-#####################################################################################
-#Меняем пароль VNC
+###Меняем пароль VNC
 
     def on_save_button_clicked(self, button):
         input_text = self.entry_input.get_text().strip()
@@ -81,8 +94,8 @@ class UnameApp:
                 text_pw_change = "Пустой пароль!"
                 self.lbl_output_3.set_text(text_pw_change)
 
-#####################################################################################
-#Показать пароль VNC
+###Показать пароль VNC
+
     def on_btn_run_clicked(self, button):
         
         result = subprocess.Popen(
@@ -96,28 +109,60 @@ class UnameApp:
         decoded_output = output.decode().strip()
         self.entry_input.set_text(decoded_output)
 
-#####################################################################################
-#Меняем переменные
+
+###Меняем переменные
+
+ #   def on_save_button_clicked_env(self, button):
+ #       if os.geteuid() != 0:
+ #           text_pw_change = "You need to bee root!"
+ #           self.text_buffer_env.set_text(text_pw_change)
+ #       else:    
+ #          change_env = "echo {} > /etc/environment".format(self.text_buffer_env.get_text(self.text_buffer_env.get_start_iter(), self.text_buffer_env.get_end_iter(), True))
+ #          os.system(change_env)
+ #          text_pw_change = "Переменная прокси изменена!"
+ #          self.text_buffer_env.set_text(text_pw_change)
 
     def on_save_button_clicked_env(self, button):
-       # input_text_env = self.entry_input.get_text().strip()
-        #проверяем на рут тут и дальше в тело вывод полученной инфы!
-        if os.geteuid() != 0:
-            text_pw_change = "You need to bee root!"
-            self.text_buffer_env.set_text(text_pw_change)
-        else:    
-            change_env = "echo {} > /etc/environment".format(self.text_buffer_env.get_text(self.text_buffer_env.get_start_iter(), self.text_buffer_env.get_end_iter(), True))
-            os.system(change_env)
-            text_pw_change = "Переменная прокси изменена!"
-            self.text_buffer_env.set_text(text_pw_change)
-        #    else:
-         #       text_pw_change = "Пустое значение env!"
-         #       self.text_buffer_env.set_text(text_pw_change)
+        proxy_user = self.login_input.get_text().strip()
+        proxy_pass = self.pass_input.get_text().strip()
+        #Пароль и учетку нужно обрабатывать URL-encoded
+        proxy_user=urllib.parse.quote(proxy_user)
+        proxy_pass=urllib.parse.quote(proxy_pass)
 
+        #если пустой, то добавляем строчки, по которым будут меняться значения
+        proxy_file = "/etc/environment"
+        template = "ftp_proxy=\nhttp_proxy=\nhttps_proxy=\nno_proxy=\n"
 
-#####################################################################################
+        if not os.path.exists(proxy_file) or os.path.getsize(proxy_file) <= 1:
+            with open(proxy_file, 'w') as f:
+                f.write(template)
+            print(proxy_file)
 
-#Показать текущие переменные
+        # Формируем proxy
+        ftp_proxy = f"ftp_proxy=http://{proxy_user}:{proxy_pass}@i.tatar.ru:8080"
+        http_proxy = f"http_proxy=http://{proxy_user}:{proxy_pass}@i.tatar.ru:8080"
+        https_proxy = f"https_proxy=http://{proxy_user}:{proxy_pass}@i.tatar.ru:8080"
+
+        for line in fileinput.input('/etc/environment', inplace=True):
+            new_proxy = re.sub(r'ftp_proxy=.*', f'{ftp_proxy}', line)
+            new_proxy = re.sub(r'http_proxy=.*', f'{http_proxy}', new_proxy)
+            new_proxy = re.sub(r'https_proxy=.*', f'{https_proxy}', new_proxy)
+            print(new_proxy, end='')  
+
+        self.lbl_output_3.set_text("Прокси-настройки сохранены!")
+
+    # отдельная кнопка для исключении
+    def on_save_button_env_no_proxy(self, button):
+        no_user_proxy = self.no_proxy_input.get_text().strip()
+        no_user_proxy = f"no_proxy={no_user_proxy}"
+
+        for line in fileinput.input('/etc/environment', inplace=True):
+            new_no_proxy = re.sub(r'no_proxy=.*', f'{no_user_proxy}', line)
+            print(new_no_proxy, end='')
+
+        self.lbl_output_3.set_text("Прокси исключения сохранены!")
+
+###Показать текущие переменные
     def on_btn_run_env_clicked(self, button):
         result = subprocess.Popen(
                 "cat /etc/environment", 
@@ -132,16 +177,13 @@ class UnameApp:
         text_buffer.set_text(decoded_output)
         self.text_buffer_env = self.lbl_output_env.get_buffer()
 
-#####################################################################################
-#Очистить выведенные результаты 
+###Очистить выведенные результаты 
 
     def on_btn_run_3_clicked(self, button):
         print_lacuna = ''
         self.entry_input.set_text(print_lacuna)
         self.lbl_output_3.set_text(print_lacuna)
         self.text_buffer_env.set_text(print_lacuna)
-
-#####################################################################################
 
 if __name__ == "__main__":
     app = UnameApp()
