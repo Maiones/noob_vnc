@@ -29,13 +29,14 @@ class UnameApp:
 
         # Получение элементов интерфейса
         self.window = builder.get_object("MainWindow")
-        
+
         self.btn_run = builder.get_object("btn_run")
         self.btn_run_3 = builder.get_object("btn_run_3")
         self.btn_run_env = builder.get_object("btn_run_env")
         self.lbl_output_env = builder.get_object("lbl_output_env")
         self.lbl_output = builder.get_object("lbl_output")
-        
+        self.delete_proxy_settings = builder.get_object("delete_proxy_settings")
+
         ## Элементы для смены пароля
         self.entry_input = builder.get_object("entry_input")
         self.save_button = builder.get_object("save_button")
@@ -56,7 +57,8 @@ class UnameApp:
         self.btn_run_3.connect("clicked", self.on_btn_run_3_clicked)
         self.btn_run.connect("clicked", self.on_btn_run_clicked)
         self.btn_run_env.connect("clicked", self.on_btn_run_env_clicked)
-        
+        self.delete_proxy_settings.connect("clicked", self.on_delete_proxy_settings_clicked)
+
         # Подключение обработчиков сигналов смены пароля
         self.save_button.connect("clicked", self.on_save_button_clicked)
 
@@ -90,14 +92,14 @@ class UnameApp:
 
 ###Показать пароль VNC
 
-    def on_btn_run_clicked(self, button):   
+    def on_btn_run_clicked(self, button):
         result = subprocess.Popen(
-                "x11vnc -showrfbauth /root/.vnc/passwd | awk '/pass: / {print $3}'", 
-                shell=True, 
+                "x11vnc -showrfbauth /root/.vnc/passwd | awk '/pass: / {print $3}'",
+                shell=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
             )
-        
+
         output, error = result.communicate()
         decoded_output = output.decode().strip()
         self.entry_input.set_text(decoded_output)
@@ -110,6 +112,16 @@ class UnameApp:
         #Пароль и учетку нужно обрабатывать URL-encoded
         proxy_user=urllib.parse.quote(proxy_user)
         proxy_pass=urllib.parse.quote(proxy_pass)
+
+
+        #Проверяем на пустую строку в учетке/пароле
+        input_text = self.login_input.get_text().strip()
+        input_text2 = self.pass_input.get_text().strip()
+        # проверяем чтобы оба поля не были пусты
+        if not input_text or not input_text2:
+            text_pw_change = "Нет учетки/пароля!"
+            self.lbl_output_3.set_text(text_pw_change)
+            return
 
         #если пустой, то добавляем строчки, по которым будут меняться значения
         proxy_file = "/etc/environment"
@@ -139,6 +151,13 @@ class UnameApp:
         no_user_proxy = self.no_proxy_input.get_text().strip()
         no_user_proxy = f"no_proxy={no_user_proxy}"
 
+    #Проверяем на пустую строку в исключениях
+        input_text = self.no_proxy_input.get_text().strip()
+        if not input_text:
+            text_pw_change = "Пустые исключения!"
+            self.lbl_output_3.set_text(text_pw_change)
+            return
+
         for line in fileinput.input('/etc/environment', inplace=True):
             new_no_proxy = re.sub(r'no_proxy=.*', f'{no_user_proxy}', line)
             print(new_no_proxy, end='')
@@ -149,12 +168,12 @@ class UnameApp:
 ###Показать текущие переменные
     def on_btn_run_env_clicked(self, button):
         result = subprocess.Popen(
-                "cat /etc/environment", 
+                "cat /etc/environment",
                 shell=True, 
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
             )
-        
+
         output, error = result.communicate()
         decoded_output = output.decode().strip()
         text_buffer = self.lbl_output_env.get_buffer()
@@ -171,6 +190,14 @@ class UnameApp:
         self.login_input.set_text(print_lacuna)
         self.no_proxy_input.set_text(print_lacuna)
         self.text_buffer_env.set_text(print_lacuna)
+
+###Удалить все настройки переменных (сохранив бекап)
+
+    def on_delete_proxy_settings_clicked(self, button):
+        subprocess.run(['cp', '/etc/environment', '/tmp/environment'])
+        open('/etc/environment', 'w').close()
+        self.lbl_output_3.set_text("Прокси настройки удалены!\n(бекап настроек лежит в /tmp/)")
+
 
 if __name__ == "__main__":
     app = UnameApp()

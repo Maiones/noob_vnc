@@ -55,19 +55,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="btn_run_3">
-            <property name="label">Clean</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkButton" id="btn_run_env">
             <property name="label">Текущие переменные</property>
             <property name="can-focus">True</property>
@@ -82,7 +69,7 @@
         <child>
           <object class="GtkTextView" id="lbl_output_env">
             <property name="width-request">60</property>
-            <property name="height-request">180</property>
+            <property name="height-request">150</property>
             <property name="can-focus">True</property>
             <property name="populate-all">True</property>
           </object>
@@ -210,6 +197,19 @@
           </packing>
         </child>
         <child>
+          <object class="GtkButton" id="btn_run_3">
+            <property name="label">Очистить вывод</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">19</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkLabel" id="lbl_output_3">
             <property name="can-focus">False</property>
             <property name="is-focus">True</property>
@@ -224,10 +224,24 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack-type">end</property>
-            <property name="position">13</property>
+            <property name="position">21</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="delete_proxy_settings">
+            <property name="label" translatable="yes">Удалить все прокси настройки.</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">22</property>
           </packing>
         </child>
       </object>
     </child>
   </object>
+  <object class="GtkEntryBuffer" id="test"/>
 </interface>
