@@ -19,7 +19,6 @@ from gi.repository import Gtk
 #elevate()
 #print(is_root())
 
-
 class UnameApp:
     def __init__(self):
     # Попробуем загрузить интерфейс из файла Glade
@@ -43,8 +42,8 @@ class UnameApp:
 
         # Элементы для смены proxy
         self.pass_input = builder.get_object("pass_input")
-        self.login_input = builder.get_object("login_input")        
-        self.no_proxy_input = builder.get_object("no_proxy_input")        
+        self.login_input = builder.get_object("login_input")
+        self.no_proxy_input = builder.get_object("no_proxy_input")
 
         ## Элементы для смены переменных
  #       self.entry_input_env = builder.get_object("entry_input")
@@ -80,24 +79,18 @@ class UnameApp:
 
     def on_save_button_clicked(self, button):
         input_text = self.entry_input.get_text().strip()
-        #проверяем на рут тут и дальше в тело вывод полученной инфы!
-        if os.geteuid() != 0:
-            text_pw_change = "You need to bee root!"
+        if input_text:
+            change_vnc = "x11vnc -storepasswd {} /root/.vnc/passwd".format(input_text)
+            os.system(change_vnc)
+            text_pw_change = "Пароль от VNC изменен!"
             self.lbl_output_3.set_text(text_pw_change)
-        else:    
-            if input_text:
-                change_vnc = "x11vnc -storepasswd {} /root/.vnc/passwd".format(input_text)
-                os.system(change_vnc)
-                text_pw_change = "Пароль от VNC изменен!"
-                self.lbl_output_3.set_text(text_pw_change)
-            else:
-                text_pw_change = "Пустой пароль!"
-                self.lbl_output_3.set_text(text_pw_change)
+        else:
+            text_pw_change = "Пустой пароль!"
+            self.lbl_output_3.set_text(text_pw_change)
 
 ###Показать пароль VNC
 
-    def on_btn_run_clicked(self, button):
-        
+    def on_btn_run_clicked(self, button):   
         result = subprocess.Popen(
                 "x11vnc -showrfbauth /root/.vnc/passwd | awk '/pass: / {print $3}'", 
                 shell=True, 
@@ -109,18 +102,7 @@ class UnameApp:
         decoded_output = output.decode().strip()
         self.entry_input.set_text(decoded_output)
 
-
 ###Меняем переменные
-
- #   def on_save_button_clicked_env(self, button):
- #       if os.geteuid() != 0:
- #           text_pw_change = "You need to bee root!"
- #           self.text_buffer_env.set_text(text_pw_change)
- #       else:    
- #          change_env = "echo {} > /etc/environment".format(self.text_buffer_env.get_text(self.text_buffer_env.get_start_iter(), self.text_buffer_env.get_end_iter(), True))
- #          os.system(change_env)
- #          text_pw_change = "Переменная прокси изменена!"
- #          self.text_buffer_env.set_text(text_pw_change)
 
     def on_save_button_clicked_env(self, button):
         proxy_user = self.login_input.get_text().strip()
@@ -147,9 +129,10 @@ class UnameApp:
             new_proxy = re.sub(r'ftp_proxy=.*', f'{ftp_proxy}', line)
             new_proxy = re.sub(r'http_proxy=.*', f'{http_proxy}', new_proxy)
             new_proxy = re.sub(r'https_proxy=.*', f'{https_proxy}', new_proxy)
-            print(new_proxy, end='')  
+            print(new_proxy, end='')
 
         self.lbl_output_3.set_text("Прокси-настройки сохранены!")
+        self.on_btn_run_env_clicked(button)
 
     # отдельная кнопка для исключении
     def on_save_button_env_no_proxy(self, button):
@@ -161,6 +144,7 @@ class UnameApp:
             print(new_no_proxy, end='')
 
         self.lbl_output_3.set_text("Прокси исключения сохранены!")
+        self.on_btn_run_env_clicked(button)
 
 ###Показать текущие переменные
     def on_btn_run_env_clicked(self, button):
@@ -177,12 +161,15 @@ class UnameApp:
         text_buffer.set_text(decoded_output)
         self.text_buffer_env = self.lbl_output_env.get_buffer()
 
-###Очистить выведенные результаты 
+###Очистить выведенные результаты
 
     def on_btn_run_3_clicked(self, button):
         print_lacuna = ''
         self.entry_input.set_text(print_lacuna)
         self.lbl_output_3.set_text(print_lacuna)
+        self.pass_input.set_text(print_lacuna)
+        self.login_input.set_text(print_lacuna)
+        self.no_proxy_input.set_text(print_lacuna)
         self.text_buffer_env.set_text(print_lacuna)
 
 if __name__ == "__main__":
