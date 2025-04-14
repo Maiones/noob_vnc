@@ -23,8 +23,7 @@ class UnameApp:
     def __init__(self):
     # Попробуем загрузить интерфейс из файла Glade
         builder = Gtk.Builder()
- #       builder.add_from_file("/opt/glade/interface.glade")
-        builder.add_from_file("/home/user/kva-kva/scripts/py_scripts/noob_vnc/glade/interface.glade")
+        builder.add_from_file("/opt/glade/interface.glade")
         builder.connect_signals(self)
 
         # Получение элементов интерфейса
@@ -82,7 +81,7 @@ class UnameApp:
     def on_save_button_clicked(self, button):
         input_text = self.entry_input.get_text().strip()
         if input_text:
-            change_vnc = "x11vnc -storepasswd {} /root/.vnc/passwd".format(input_text)
+            change_vnc = "x11vnc -storepasswd {} /etc/x11vnc.pass".format(input_text)
             os.system(change_vnc)
             text_pw_change = "Пароль от VNC изменен!"
             self.lbl_output_3.set_text(text_pw_change)
@@ -94,7 +93,7 @@ class UnameApp:
 
     def on_btn_run_clicked(self, button):
         result = subprocess.Popen(
-                "x11vnc -showrfbauth /root/.vnc/passwd | awk '/pass: / {print $3}'",
+                "x11vnc -showrfbauth /etc/x11vnc.pass | awk '/pass: / {print $3}'",
                 shell=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
