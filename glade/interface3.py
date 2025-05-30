@@ -23,7 +23,7 @@ class UnameApp:
     def __init__(self):
     # Попробуем загрузить интерфейс из файла Glade
         builder = Gtk.Builder()
-        builder.add_from_file("/opt/glade/interface.glade")
+        builder.add_from_file("/opt/admin-proxy_and_vnc/interface.glade")
         builder.connect_signals(self)
 
         # Получение элементов интерфейса
@@ -148,7 +148,7 @@ class UnameApp:
     # отдельная кнопка для исключении
     def on_save_button_env_no_proxy(self, button):
         no_user_proxy = self.no_proxy_input.get_text().strip()
-        no_user_proxy = f"no_proxy={no_user_proxy}"
+        no_user_proxy = f'no_proxy="{no_user_proxy}"'
 
     #Проверяем на пустую строку в исключениях
         input_text = self.no_proxy_input.get_text().strip()
