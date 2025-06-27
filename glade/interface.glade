@@ -14,56 +14,59 @@
         <property name="orientation">vertical</property>
         <property name="spacing">4</property>
         <child>
-          <object class="GtkButton" id="btn_run">
-            <property name="label">VNS Пароль</property>
-            <property name="can-focus">False</property>
-            <property name="receives-default">False</property>
+          <object class="GtkPaned">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <child>
+              <object class="GtkButton" id="btn_run">
+                <property name="label">VNS Пароль</property>
+                <property name="can-focus">False</property>
+                <property name="receives-default">False</property>
+              </object>
+              <packing>
+                <property name="resize">False</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkPaned">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <child>
+                  <object class="GtkEntry" id="entry_input">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="caps-lock-warning">False</property>
+                    <property name="populate-all">True</property>
+                  </object>
+                  <packing>
+                    <property name="resize">False</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="save_button">
+                    <property name="label" translatable="yes">Сменить</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                  </object>
+                  <packing>
+                    <property name="resize">False</property>
+                    <property name="shrink">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="entry_input">
-            <property name="can-focus">True</property>
-            <property name="truncate-multiline">True</property>
-            <property name="caps-lock-warning">False</property>
-            <property name="primary-icon-activatable">False</property>
-            <property name="secondary-icon-activatable">False</property>
-            <property name="primary-icon-sensitive">False</property>
-            <property name="secondary-icon-sensitive">False</property>
-            <property name="populate-all">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="save_button">
-            <property name="label">Сменить VNC пароль</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btn_run_env">
-            <property name="label">Текущие переменные</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -76,23 +79,69 @@
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btn_run_env">
+            <property name="label">Текущие прокси</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
             <property name="position">4</property>
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="text_proxy_user">
+          <object class="GtkPaned">
+            <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="editable">False</property>
-            <property name="has-frame">False</property>
-            <property name="text" translatable="yes">Учетка прокси:</property>
-            <property name="truncate-multiline">True</property>
-            <property name="caps-lock-warning">False</property>
-            <property name="primary-icon-activatable">False</property>
-            <property name="secondary-icon-activatable">False</property>
-            <property name="primary-icon-sensitive">False</property>
-            <property name="secondary-icon-sensitive">False</property>
-            <property name="input-purpose">name</property>
-            <property name="populate-all">True</property>
+            <child>
+              <object class="GtkEntry" id="text_proxy_server">
+                <property name="can-focus">True</property>
+                <property name="editable">False</property>
+                <property name="has-frame">False</property>
+                <property name="text" translatable="yes">Proxy-server:</property>
+                <property name="truncate-multiline">True</property>
+                <property name="caps-lock-warning">False</property>
+                <property name="primary-icon-activatable">False</property>
+                <property name="secondary-icon-activatable">False</property>
+                <property name="primary-icon-sensitive">False</property>
+                <property name="secondary-icon-sensitive">False</property>
+                <property name="input-purpose">name</property>
+                <property name="populate-all">True</property>
+              </object>
+              <packing>
+                <property name="resize">False</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="name">text_proxy_server_imput</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkEntry" id="proxy_server_imput">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="text" translatable="yes">i.tatar.ru</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -101,15 +150,53 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="login_input">
+          <object class="GtkPaned">
+            <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="truncate-multiline">True</property>
-            <property name="caps-lock-warning">False</property>
-            <property name="primary-icon-activatable">False</property>
-            <property name="secondary-icon-activatable">False</property>
-            <property name="primary-icon-sensitive">False</property>
-            <property name="secondary-icon-sensitive">False</property>
-            <property name="populate-all">True</property>
+            <child>
+              <object class="GtkEntry" id="text_proxy_port">
+                <property name="can-focus">True</property>
+                <property name="editable">False</property>
+                <property name="has-frame">False</property>
+                <property name="text" translatable="yes">Proxy-port:</property>
+                <property name="truncate-multiline">True</property>
+                <property name="caps-lock-warning">False</property>
+                <property name="primary-icon-activatable">False</property>
+                <property name="secondary-icon-activatable">False</property>
+                <property name="primary-icon-sensitive">False</property>
+                <property name="secondary-icon-sensitive">False</property>
+                <property name="input-purpose">name</property>
+                <property name="populate-all">True</property>
+              </object>
+              <packing>
+                <property name="resize">False</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="name">text_proxy_port_imput</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkEntry" id="proxy_port_imput">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="text" translatable="yes">8080</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -118,41 +205,101 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="text_proxy_pass">
+          <object class="GtkPaned">
+            <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="editable">False</property>
-            <property name="has-frame">False</property>
-            <property name="text" translatable="yes">Пароль прокси:</property>
-            <property name="truncate-multiline">True</property>
-            <property name="caps-lock-warning">False</property>
-            <property name="primary-icon-activatable">False</property>
-            <property name="secondary-icon-activatable">False</property>
-            <property name="primary-icon-sensitive">False</property>
-            <property name="secondary-icon-sensitive">False</property>
-            <property name="input-purpose">name</property>
-            <property name="populate-all">True</property>
+            <child>
+              <object class="GtkEntry" id="text_proxy_user">
+                <property name="can-focus">True</property>
+                <property name="editable">False</property>
+                <property name="has-frame">False</property>
+                <property name="text" translatable="yes">Учетка прокси:</property>
+                <property name="truncate-multiline">True</property>
+                <property name="caps-lock-warning">False</property>
+                <property name="primary-icon-activatable">False</property>
+                <property name="secondary-icon-activatable">False</property>
+                <property name="primary-icon-sensitive">False</property>
+                <property name="secondary-icon-sensitive">False</property>
+                <property name="input-purpose">name</property>
+                <property name="populate-all">True</property>
+              </object>
+              <packing>
+                <property name="resize">False</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="login_input">
+                <property name="can-focus">True</property>
+                <property name="caps-lock-warning">False</property>
+                <property name="populate-all">True</property>
+              </object>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">8</property>
+            <property name="position">7</property>
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="pass_input">
+          <object class="GtkButton" id="btn_run_3">
+            <property name="label">Очистить вывод</property>
             <property name="can-focus">True</property>
-            <property name="truncate-multiline">True</property>
-            <property name="caps-lock-warning">False</property>
-            <property name="primary-icon-activatable">False</property>
-            <property name="secondary-icon-activatable">False</property>
-            <property name="primary-icon-sensitive">False</property>
-            <property name="secondary-icon-sensitive">False</property>
-            <property name="populate-all">True</property>
+            <property name="receives-default">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">9</property>
+            <property name="pack-type">end</property>
+            <property name="position">11</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkPaned">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <child>
+              <object class="GtkEntry" id="text_proxy_pass">
+                <property name="can-focus">True</property>
+                <property name="editable">False</property>
+                <property name="has-frame">False</property>
+                <property name="text" translatable="yes">Пароль прокси:</property>
+                <property name="truncate-multiline">True</property>
+                <property name="caps-lock-warning">False</property>
+                <property name="primary-icon-activatable">False</property>
+                <property name="secondary-icon-activatable">False</property>
+                <property name="primary-icon-sensitive">False</property>
+                <property name="secondary-icon-sensitive">False</property>
+                <property name="input-purpose">name</property>
+                <property name="populate-all">True</property>
+              </object>
+              <packing>
+                <property name="resize">False</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="pass_input">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="caps-lock-warning">False</property>
+                <property name="populate-all">True</property>
+              </object>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">16</property>
           </packing>
         </child>
         <child>
@@ -164,7 +311,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">10</property>
+            <property name="position">18</property>
           </packing>
         </child>
         <child>
@@ -181,7 +328,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">11</property>
+            <property name="position">19</property>
           </packing>
         </child>
         <child>
@@ -193,20 +340,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">12</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btn_run_3">
-            <property name="label">Очистить вывод</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">19</property>
+            <property name="position">20</property>
           </packing>
         </child>
         <child>
@@ -243,5 +377,4 @@
       </object>
     </child>
   </object>
-  <object class="GtkEntryBuffer" id="test"/>
 </interface>

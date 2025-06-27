@@ -1,0 +1,2 @@
+Name: admin-proxy_and_vnc
+version: 1.2

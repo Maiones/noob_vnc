@@ -23,7 +23,8 @@ class UnameApp:
     def __init__(self):
     # Попробуем загрузить интерфейс из файла Glade
         builder = Gtk.Builder()
-        builder.add_from_file("/opt/admin-proxy_and_vnc/interface.glade")
+#        builder.add_from_file("/opt/admin-proxy_and_vnc/interface.glade")
+        builder.add_from_file("/home/user/kva-kva/scripts/py_scripts/noob_vnc/glade/interface.glade")
         builder.connect_signals(self)
 
         # Получение элементов интерфейса
@@ -45,8 +46,11 @@ class UnameApp:
         self.login_input = builder.get_object("login_input")
         self.no_proxy_input = builder.get_object("no_proxy_input")
 
+        ## Элементы для смены proxy server/port
+        self.proxy_port_imput = builder.get_object("proxy_port_imput")
+        self.proxy_server_imput = builder.get_object("proxy_server_imput")
+
         ## Элементы для смены переменных
- #       self.entry_input_env = builder.get_object("entry_input")
         self.save_button_env = builder.get_object("save_button_env")
 
         ## Элементы для смены прокси исключении
@@ -108,17 +112,22 @@ class UnameApp:
     def on_save_button_clicked_env(self, button):
         proxy_user = self.login_input.get_text().strip()
         proxy_pass = self.pass_input.get_text().strip()
+
+        proxy_server = self.proxy_server_imput.get_text().strip()
+        proxy_port = self.proxy_port_imput.get_text().strip()
+
         #Пароль и учетку нужно обрабатывать URL-encoded
         proxy_user=urllib.parse.quote(proxy_user)
         proxy_pass=urllib.parse.quote(proxy_pass)
 
 
         #Проверяем на пустую строку в учетке/пароле
+        #Учетку можно не вбивать! если localhost
         input_text = self.login_input.get_text().strip()
         input_text2 = self.pass_input.get_text().strip()
-        # проверяем чтобы оба поля не были пусты
-        if not input_text or not input_text2:
-            text_pw_change = "Нет учетки/пароля!"
+
+        if not input_text:
+            text_pw_change = "Указан пароль без учетки!"
             self.lbl_output_3.set_text(text_pw_change)
             return
 
@@ -131,10 +140,9 @@ class UnameApp:
                 f.write(template)
             print(proxy_file)
 
-        # Формируем proxy
-        ftp_proxy = f"ftp_proxy=http://{proxy_user}:{proxy_pass}@i.tatar.ru:8080"
-        http_proxy = f"http_proxy=http://{proxy_user}:{proxy_pass}@i.tatar.ru:8080"
-        https_proxy = f"https_proxy=http://{proxy_user}:{proxy_pass}@i.tatar.ru:8080"
+        ftp_proxy = f"ftp_proxy=http://{proxy_user}:{proxy_pass}@{proxy_server}:{proxy_port}"
+        http_proxy = f"http_proxy=http://{proxy_user}:{proxy_pass}@{proxy_server}:{proxy_port}"
+        https_proxy = f"https_proxy=http://{proxy_user}:{proxy_pass}@{proxy_server}:{proxy_port}"
 
         for line in fileinput.input('/etc/environment', inplace=True):
             new_proxy = re.sub(r'ftp_proxy=.*', f'{ftp_proxy}', line)
